@@ -1,0 +1,19 @@
+# Use an official CentOS image
+FROM centos:8
+
+# Install dependencies
+RUN dnf install -y epel-release && dnf install -y httpd mariadb-server php php-mysql php-gd php-xml php-mbstring php-imap php-ldap php-intl wget unzip
+
+# Download and extract osTicket
+RUN wget https://github.com/osTicket/osTicket/releases/download/v1.15.5/osTicket-v1.15.5.zip && unzip osTicket-v1.15.5.zip -d /var/www/html/
+
+# Configure permissions
+RUN chown -R apache:apache /var/www/html/upload
+
+# Expose necessary ports
+EXPOSE 80
+
+# Start Apache in the foreground
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+
+
